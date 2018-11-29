@@ -1,0 +1,25 @@
+{
+    "name": "ximdex/semantic_information_repository",
+    "type": "library",
+    "license": "AGPL-v3",
+    "authors": [
+        {
+            "name": "Alejandro de Tovar",
+            "email": "venespana159@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Ximdex\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ximdex\\ServiceProvider"
+            ]
+        }
+    }
+}
