@@ -3,8 +3,8 @@
 namespace Ximdex\Core\Auth;
 
 use Ximdex\Traits\Tokenizer;
-use Ximdex\Core\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Ximdex\Core\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Auth\Authenticatable as TraitAuthenticatable;
@@ -19,6 +19,7 @@ class Authenticatable extends Model implements
 {
     use Notifiable, TraitAuthenticatable, Authorizable, CanResetPassword;
     use Tokenizer;
+
     public static function create(array $attributes)
     {
         $attributes['api_token'] = static::generateToken();
@@ -26,6 +27,7 @@ class Authenticatable extends Model implements
         $model = static::query()->create($attributes);
         return $model;
     }
+    
     public function update(array $attributes = [], array $options = [])
     {
         $fillable = array_diff($this->fillable, ['email', 'username']);
