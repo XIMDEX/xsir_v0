@@ -20,6 +20,7 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     /**
