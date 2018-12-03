@@ -105,6 +105,15 @@ class Model extends BaseModel
         return parent::update($attributes, $options);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public static function create(array $attributes)
+    {
+        $model = new static($attributes);
+        return $model->query()->create($model->attributes);
+    }
+
     /********************************  Scopes   *******************************/
 
     /**
