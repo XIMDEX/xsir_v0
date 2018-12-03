@@ -18,13 +18,19 @@ class CreateNodeTable extends Migration
             $table->unsignedInteger('parent_id')
                 ->default(0)
                 ->comment('Parent node in the tree view');
-            $table->string('type', 255)
-                ->comment('Class name of node type');
+            $table->unsignedInteger('node_type_id')
+                ->comment('The node type relation');
             $table->string('name', 255)
                 ->comment('The node name to view in tree');
             $table->timestamps();
 
             $table->unique(['name', 'parent_id']);
+
+            $table->foreign('node_type_id')
+                ->references('id')
+                ->on('node_types')
+                ->onDelete('cascade')
+                ->nullable();
         });
     }
 
