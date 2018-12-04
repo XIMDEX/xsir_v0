@@ -21,20 +21,7 @@ class NodeTypeScope implements Scope
         $nodeType = class_basename($model);
         $nodeType = NodeType::select('id')->where('type', 'like', $nodeType)->first();
        
-        $children = $this->getChildren($nodeType->id);
+        $children = $nodeType->getChildren(-1);
         $builder->whereIn('node_type_id', $children);
-    }
-
-
-    private function getChildren($id)
-    {
-        $children = NodeType::where('parent_id', $id)->get();
-        $nodes[] = $id;
-        
-        foreach ($children as $nodeType) {
-            $nodes = array_merge($nodes, $this->getChildren($nodeType->id));
-        }
-
-        return $nodes;
     }
 }
