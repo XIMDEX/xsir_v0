@@ -12,7 +12,7 @@ class HTML extends Structured
      * @var array
      */
     protected $nodeProperties = [
-        'icon' => 'html',
+        'icon' => 'code_file',
         'isHidden' => false,
         'isPublishable' => true
     ];

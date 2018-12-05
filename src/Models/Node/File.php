@@ -7,9 +7,7 @@ use Ximdex\Models\Node;
 class File extends Node
 {
     /**
-     * Set bassic properties to the node
-     *
-     * @var array
+     * @inheritDoc
      */
     protected $nodeProperties = [
         'icon' => 'file',
