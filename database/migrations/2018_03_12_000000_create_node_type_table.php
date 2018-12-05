@@ -20,6 +20,8 @@ class CreateNodeTypeTable extends Migration
                 ->comment('Class name of parent node type');
             $table->string('type', 255)
                 ->comment('Class name of node type');
+            $table->string('namespace', 255)
+                ->comment('Namespace of node type');
             $table->timestamps();
 
             $table->unique(['type', 'parent_id']);

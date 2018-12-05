@@ -41,8 +41,8 @@ class Node extends Model
      * @var array
      */
     protected $nodeProperties = [
-        'icon' => null,
-        'isHidden' => false,
+        'icon' => "nodes",
+        'isHidden' => true,
         'isPublishable' => false,
     ];
 
@@ -76,7 +76,10 @@ class Node extends Model
 
     public function getPropertiesAttribute() : array
     {
-        return $this->nodeProperties;
+        $class = "{$this->node_type->namespace}\\{$this->type}";
+        $result = (new $class)->nodeProperties;
+        $result['icon'] = config("xsir.icons.{$result['icon']}", $result['icon']);
+        return $result;
     }
 
     public function getIconPropertyAttribute()
@@ -91,6 +94,6 @@ class Node extends Model
 
     public function getTypeAttribute()
     {
-        return $this->node_type;
+        return $this->node_type->type;
     }
 }
