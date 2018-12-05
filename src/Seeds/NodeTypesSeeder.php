@@ -35,6 +35,11 @@ class NodeTypesSeeder extends Seeder
                     $nodeType = NodeType::where('type', 'like', $base)->firstOrFail();
                     $parent = $nodeType->id;
                 }
+
+                $node = NodeType::where('parent_id', $parent)->where('type', $type)->first();
+                if ($node) {
+                    continue;
+                }
                 
                 NodeType::create([
                     'parent_id' => $parent,
