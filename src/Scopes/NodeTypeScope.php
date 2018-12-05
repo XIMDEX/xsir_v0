@@ -18,10 +18,31 @@ class NodeTypeScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $nodeType = class_basename($model);
-        $nodeType = NodeType::select('id')->where('type', 'like', $nodeType)->first();
-       
-        $children = $nodeType->getChildren(-1);
+        $children = $this->getChildrenNodeTypes($model);
         $builder->whereIn('node_type_id', $children);
+    }
+
+    private function getChildrenNodeTypes(Model $model) : array
+    {
+        $nodeType = class_basename($model);
+        $nodeType = NodeType::where('type', 'like', $nodeType)->first();
+       
+        $children = $this->cleanTree($nodeType->tree(-1));
+        return $children;
+    }
+
+    private function cleanTree(array $tree) : array
+    {
+        $data = [];
+
+        foreach ($tree as $key => $value) {
+            ['node' => $node, 'children' => $children] = array_replace(['node' => null, 'children' => null], $value);
+            $data[] = $node->id;
+            if (is_array($children) && count($children) > 0) {
+                $data = array_merge($data, $this->cleanTree($children));
+            }
+        }
+
+        return $data;
     }
 }
