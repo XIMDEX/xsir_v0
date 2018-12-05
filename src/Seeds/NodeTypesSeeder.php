@@ -38,7 +38,8 @@ class NodeTypesSeeder extends Seeder
                 
                 NodeType::create([
                     'parent_id' => $parent,
-                    'type' => $type
+                    'type' => $type,
+                    'namespace' => str_replace_last("\\{$type}", '', $class)
                 ]);
             }
         } catch (\Exception $ex) {
