@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'filesystem' => require_once(__DIR__.'/filesystem.php'),
     // Icons class maps
     'icons' => [
         'nodes' => 'fas fa-sitemap',
