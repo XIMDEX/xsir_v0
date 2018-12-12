@@ -32,7 +32,8 @@ class Node extends Model
      */
     protected $appends = [
         'properties',
-        'type'
+        'type',
+        'last_version'
     ];
 
     /**
@@ -44,6 +45,7 @@ class Node extends Model
         'icon' => "nodes",
         'isHidden' => true,
         'isPublishable' => false,
+        'isCacheable' => true
     ];
 
     protected $_relations = [
@@ -51,6 +53,12 @@ class Node extends Model
             'type' => 'belongsTo',
             'model' => NodeType::class
         ],
+        'version' => [
+            'type' => 'hasMany',
+            'model' => Version::class,
+            'foreignKey' => 'node_id',
+            'localKey' => 'id',
+        ]
     ];
 
     public function __construct(array $attributes = [])
@@ -58,7 +66,7 @@ class Node extends Model
         parent::__construct($attributes);
 
         $this->attributes = array_merge($this->attributes, [
-            'type' => class_basename(static::class)
+            'node_type_id' => NodeType::where('type', class_basename(static::class))->select('id')->first()->id
         ]);
     }
 
@@ -95,5 +103,10 @@ class Node extends Model
     public function getTypeAttribute()
     {
         return $this->node_type->type;
+    }
+
+    public function getLastVersionAttribute()
+    {
+        return $this->version()->orderBy('major', 'asc')->first();
     }
 }

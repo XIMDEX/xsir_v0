@@ -23,6 +23,9 @@ class CreateVersionTable extends Migration
             $table->integer('minor')
                 ->default(0)
                 ->comment('Minor version number');
+            $table->string('file', 255)
+                ->unique()
+                ->comment('Node content file');
             $table->timestamps();
 
             $table->unique(['node_id', 'major', 'minor']);

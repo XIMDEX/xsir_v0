@@ -9,4 +9,10 @@ class Version extends Model
     protected $fillable = [
         'node_id',
     ];
+
+    protected $hidden = [
+        'id',
+        'node_id',
+        'updated_at'
+    ];
 }
