@@ -55,6 +55,13 @@ class Model extends BaseModel
                             $data['relation'] ?? null
                         );
                         break;
+                    case 'hasMany':
+                        $result = $this->$func(
+                            $data['model'],
+                            $data['foreignKey'] ?? null,
+                            $data['localKey'] ?? null
+                        );
+                        break;
                     case 'hasManyThrough':
                         $result = $this->$func(
                             $data['model'],
