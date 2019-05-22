@@ -14,7 +14,7 @@ class Controller extends BaseController
     public function response($message, $data = null, $statusCode = 200)
     {
         $statusCode = $statusCode != 0 ? $statusCode : 500;
-        $result = $statusCode < 300 ? 'result' : 'error';
+        $result = $statusCode < 300 ? 'data' : 'error';
 
         $response = response();
 
