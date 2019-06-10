@@ -11,6 +11,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    protected $forceJson = false;
+
     public function response($message, $data = null, $statusCode = 200)
     {
         $statusCode = $statusCode != 0 ? $statusCode : 500;
@@ -18,12 +20,12 @@ class Controller extends BaseController
 
         $response = response();
 
-        if (\Request::isJson()) {
+        if (\Request::isJson() || $this->forceJson) {
             $response = $response->json([
                 'message' => $message,
                 $result => $data,
             ], $statusCode);
-        } elseif ($result === 'result') {
+        } elseif ($result === 'data') {
             $data = is_null($data) ? [] : $data;
             $response = $response->view($message, $data, $statusCode);
         } else {
