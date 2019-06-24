@@ -90,6 +90,14 @@ class FileSystem
         return $this->getStorage()->get($path);
     }
 
+    public function delete(string $path)
+    {
+        if (!$this->exists($path)) {
+            throw new FileNotFoundException("File not found on Disk: {$this->disk} at Path: {$path}");
+        }
+        return $this->getStorage()->delete($path);
+    }
+
     public function type($data)
     {
         $mimeTypes = new MimeTypes();
@@ -163,7 +171,7 @@ class FileSystem
         return array_merge($data, $iptc, $exif);
     }
 
-    protected function tmp($file)
+    protected function tmp($file): string
     {
         $hash =  uniqid();
         $tmp = 'tmp';

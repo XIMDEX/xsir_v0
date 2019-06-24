@@ -13,12 +13,17 @@ class Controller extends BaseController
 
     protected $forceJson = false;
 
+    public function __construct()
+    { }
+
     public function response($message, $data = null, $statusCode = 200)
     {
         $statusCode = $statusCode != 0 ? $statusCode : 500;
         $result = $statusCode < 300 ? 'data' : 'error';
 
         $response = response();
+
+
 
         if (\Request::isJson() || $this->forceJson) {
             $response = $response->json([

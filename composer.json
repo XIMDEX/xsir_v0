@@ -22,7 +22,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Ximdex\\ServiceProvider"
+                "Ximdex\\ServiceProvider",
+                "XmlMiddleware\\XmlRequestServiceProvider"
             ]
         }
     }
