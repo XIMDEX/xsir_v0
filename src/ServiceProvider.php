@@ -21,8 +21,11 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../configs/xsir.php', 'xsir');
+        $this->mergeConfigFrom(__DIR__ . '/../config/xsir.php', 'xsir');
+
+        if (config('xsir.migrations', true)) {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        }
     }
 
     /**

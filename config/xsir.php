@@ -14,5 +14,8 @@ return [
         'image_file' => 'fas fa-file-image',
         'video_file' => 'fas fa-file-video',
         'common_file' => 'fas fa-file',
-    ]
+    ],
+
+    // enable migrations
+    'migrations' => true,
 ];
