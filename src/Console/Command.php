@@ -4,6 +4,7 @@ namespace Ximdex\Console;
 
 use Illuminate\Console\Parser;
 use Illuminate\Console\Command as BaseCommand;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 class Command extends BaseCommand
 {
@@ -32,6 +33,13 @@ class Command extends BaseCommand
         }
 
         $this->log($message, $type);
+    }
+
+    protected function warning($message)
+    {
+        $style = new OutputFormatterStyle('yellow', null, ['bold']);
+        $this->output->getFormatter()->setStyle('warning', $style);
+        $this->line("<warning>{$message}</warning>");
     }
 
     protected function log($message, $type = 'info')
