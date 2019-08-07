@@ -37,17 +37,40 @@ class Model extends BaseModel
                 $func = $data['type'];
                 switch ($func) {
                     case 'belongsTo':
-                        $result = $this->$func($data['model'], $data['fk'] ?? null, $data['ok'] ?? null,
-                            $data['relation'] ?? $method);
+                        $result = $this->$func(
+                            $data['model'],
+                            $data['fk'] ?? null,
+                            $data['ok'] ?? null,
+                            $data['relation'] ?? $method
+                        );
                         break;
                     case 'belongsToMany':
-                        $result = $this->$func($data['model'], $data['relation'] ?? null,
-                            $data['foreignPivotKey'] ?? null, $data['relatedPivotKey'] ?? $method,
-                            $data['parentKey'] ?? null, $data['relatedKey'] ?? null, $data['relation'] ?? null);
+                        $result = $this->$func(
+                            $data['model'],
+                            $data['relation'] ?? null,
+                            $data['foreignPivotKey'] ?? null,
+                            $data['relatedPivotKey'] ?? $method,
+                            $data['parentKey'] ?? null,
+                            $data['relatedKey'] ?? null,
+                            $data['relation'] ?? null
+                        );
+                        break;
+                    case 'hasMany':
+                        $result = $this->$func(
+                            $data['model'],
+                            $data['foreignKey'] ?? null,
+                            $data['localKey'] ?? null
+                        );
                         break;
                     case 'hasManyThrough':
-                        $result = $this->$func($data['model'], $data['model1'] ?? null, $data['fk'] ?? null,
-                            $data['fk1'] ?? null, $data['pk'] ?? null, $data['pk1'] ?? null);
+                        $result = $this->$func(
+                            $data['model'],
+                            $data['model1'] ?? null,
+                            $data['fk'] ?? null,
+                            $data['fk1'] ?? null,
+                            $data['pk'] ?? null,
+                            $data['pk1'] ?? null
+                        );
                         break;
                     default:
                         $result = $this->$func($data['model']);
@@ -89,6 +112,15 @@ class Model extends BaseModel
         return parent::update($attributes, $options);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public static function create(array $attributes)
+    {
+        $model = new static($attributes);
+        return $model->query()->create($model->attributes);
+    }
+
     /********************************  Scopes   *******************************/
 
     /**
@@ -121,13 +153,10 @@ class Model extends BaseModel
 
     public function removeJoin(Builder $Builder, $table)
     {
-        foreach($Builder->getQuery()->joins as $key => $JoinClause)
-        {
-            if($JoinClause->table == $table)
-            {
+        foreach ($Builder->getQuery()->joins as $key => $JoinClause) {
+            if ($JoinClause->table == $table) {
                 unset($Builder->getQuery()->joins[$key]);
             }
         }
     }
-
 }

@@ -1,0 +1,19 @@
+<?php
+
+namespace Ximdex\Models\Node\File\Structured;
+
+use Ximdex\Models\Node\File\Structured;
+
+class HTML extends Structured
+{
+    /**
+     * Set bassic properties to the node
+     *
+     * @var array
+     */
+    protected $nodeProperties = [
+        'icon' => 'code_file',
+        'isHidden' => false,
+        'isPublishable' => true
+    ];
+}

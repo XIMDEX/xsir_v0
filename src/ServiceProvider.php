@@ -2,6 +2,7 @@
 
 namespace Ximdex;
 
+use Ximdex\Providers\StorageServiceProvider;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 class ServiceProvider extends LaravelServiceProvider
@@ -20,6 +21,11 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        $this->mergeConfigFrom(__DIR__ . '/../config/xsir.php', 'xsir');
+
+        if (config('xsir.migrations', true)) {
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        }
     }
 
     /**
@@ -29,5 +35,6 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     {
+        $this->app->register(StorageServiceProvider::class);
     }
 }

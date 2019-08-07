@@ -32,7 +32,7 @@ abstract class Enum
      */
     public static function getConstants()
     {
-        if (self::$constCacheArray == NULL) {
+        if (self::$constCacheArray == null) {
             self::$constCacheArray = [];
         }
         $calledClass = static::class;
@@ -79,7 +79,7 @@ abstract class Enum
         }
         return $values;
     }
-    protected abstract static function data();
+    abstract protected static function data();
     public function __call($name, $arguments)
     {
         $func = strtolower(str_replace('get', '', $name));
