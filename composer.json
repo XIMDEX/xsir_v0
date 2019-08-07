@@ -1,7 +1,8 @@
 {
     "name": "ximdex/semantic_information_repository",
+    "description": "Ximdex base core",
     "type": "library",
-    "license": "AGPL-v3",
+    "license": "AGPL-3.0",
     "authors": [
         {
             "name": "Alejandro de Tovar",
