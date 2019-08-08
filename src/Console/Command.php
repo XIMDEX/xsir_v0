@@ -6,10 +6,23 @@ use Illuminate\Console\Parser;
 use Illuminate\Console\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
+/**
+ * Base command class to handle generic methods in projects commands
+ */
 class Command extends BaseCommand
 {
+    /**
+     * Log chanel to save command log output write with log() function
+     *
+     * @var string
+     */
     protected $logChannel = 'commands';
 
+    /**
+     * Default params to commands
+     *
+     * @var string
+     */
     private $defaultParams = '{ --l|log : Display output in log file }';
 
     function __construct()
@@ -19,33 +32,72 @@ class Command extends BaseCommand
         $this->addDefaultParams();
     }
 
+    /**
+     * Set the default params describe in $defaultParams property
+     * and enable to use in cli
+     *
+     * @return void
+     */
     protected function addDefaultParams()
     {
+        // Parse the command name and params and return an rray with [name, arguments, options]
         [$name, $arguments, $options] = Parser::parse("{$this->name} {$this->defaultParams}");
+
+        // Add arguments and options to current command
         $this->getDefinition()->addArguments($arguments);
         $this->getDefinition()->addOptions($options);
     }
 
-    protected function message($message, $type = 'info')
+
+    /**
+     * Print a message in console if option verbose is true in command or if $force params is true
+     *
+     * @param string $message
+     * @param string $type
+     * @param bool $force
+     * 
+     * @return void
+     */
+    protected function message(string $message, string $type = 'info', bool $force = false)
     {
-        if ($this->option('verbose')) {
-            $this->$type($message);
+        $method =  method_exists($this, $type) ? $type : 'info';
+
+        if ($this->option('verbose') || $force) {
+            $this->{$method}($message);
         }
 
-        $this->log($message, $type);
+        $this->log($message, $type, $force);
     }
 
-    protected function warning($message)
+    /**
+     * Print Warning message in command line
+     *
+     * @param string $message
+     * @return void
+     */
+    protected function warning(string $message)
     {
         $style = new OutputFormatterStyle('yellow', null, ['bold']);
         $this->output->getFormatter()->setStyle('warning', $style);
         $this->line("<warning>{$message}</warning>");
     }
 
-    protected function log($message, $type = 'info')
+    /**
+     * Print a message in Log file if option verbose is true in command or if $force params is true
+     *
+     * @param string $message
+     * @param string $type
+     * @param boolean $force
+     * 
+     * @return void
+     */
+    protected function log(string $message, string $type = 'info', bool $force = false)
     {
         if ($this->option('log')) {
-            \Log::channel($this->logChannel)->$type($message);
+            $logger = Log::channel($this->logChannel);
+            $method = method_exists($logger, $type) ? $type : 'info';
+
+            $logger->{$method}($message);
         }
     }
 }
