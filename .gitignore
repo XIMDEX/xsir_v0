@@ -2,3 +2,8 @@
 .idea
 .DS_store
 /vendor/
+/.settings/
+/.buildpath
+/.project
+/composer.lock
+/.scannerwork/
