@@ -10,8 +10,8 @@ services:
 #   mariadb: '10.3'
 
 before_install:
-  - mkdir packages packages/xsir
-  - mv * packages/xsir
+  - mv * packages
+  - mv packages/* packages/xsir
   - composer self-update
   - mysql -e 'CREATE DATABASE laravel;'
 
