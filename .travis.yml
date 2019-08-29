@@ -3,11 +3,11 @@ language: php
 php:
   - 7.3
 
-# services:
-#   - mysql
+services:
+  - mysql
 
-addons:
-  mariadb: '10.3'
+# addons:
+#   mariadb: '10.3'
 
 before_install:
   - composer self-update
@@ -20,7 +20,6 @@ before_script:
   - cd laravel
   - composer install --no-interaction
   - php artisan key:generate
-  - php artisan jwt:generate
   - php artisan migrate
 
 script:
