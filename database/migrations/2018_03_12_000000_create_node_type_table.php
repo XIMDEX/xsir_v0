@@ -16,8 +16,8 @@ class CreateNodeTypeTable extends Migration
         Schema::create('node_types', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('parent_id')
-                ->default(0)
-                ->comment('Class name of parent node type');
+                ->comment('Class name of parent node type')
+                ->nullable();
             $table->string('type', 255)
                 ->comment('Class name of node type');
             $table->string('namespace', 255)
@@ -25,6 +25,12 @@ class CreateNodeTypeTable extends Migration
             $table->timestamps();
 
             $table->unique(['type', 'parent_id']);
+            
+            $table->foreign('parent_id')
+            ->references('id')
+            ->on('node_types')
+            ->onDelete('restrict')
+            ->onUpdate('cascade');
         });
     }
 
