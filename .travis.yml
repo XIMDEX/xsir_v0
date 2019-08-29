@@ -1,0 +1,36 @@
+language: php
+
+php:
+  - 7.3
+
+services:
+  - mariadb
+
+before_install:
+  - composer self-update
+  - composer global require laravel/installer
+  - laravel new laravel
+  - mysql -e 'CREATE DATABASE laravel;'
+
+before_script:
+  - cp .env.travis laravel/.env
+  - cp phpunit.travis.xml laravel/phpunit.xml
+  - cd laravel
+  - composer install --no-interaction
+  - php artisan key:generate
+  - php artisan jwt:generate
+  - php artisan migrate
+
+script:
+  - vendor/bin/phpunit
+
+notifications:
+  email:
+    recipients:
+      - travis@ximdex.com
+    on_success: change
+    on_failure: always
+    
+  slack:
+    rooms:
+      - ximdexteam:tJAT66V6VSJeHR3H2CDCImnK#travis-ci
