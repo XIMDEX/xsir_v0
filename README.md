@@ -1,2 +1,2 @@
 # Ximdex Semantic Information Repository
-A persistant nodes storage system.
+A persistant management nodes storage system.
