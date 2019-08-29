@@ -3,13 +3,15 @@ language: php
 php:
   - 7.3
 
-services:
-  - mariadb
+# services:
+#   - mysql
+
+addons:
+  mariadb: '10.3'
 
 before_install:
   - composer self-update
-  - composer global require laravel/installer
-  - laravel new laravel
+  - composer create-project --prefer-dist laravel/laravel laravel
   - mysql -e 'CREATE DATABASE laravel;'
 
 before_script:
