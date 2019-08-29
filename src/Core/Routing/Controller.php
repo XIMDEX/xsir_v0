@@ -6,6 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 
 class Controller extends BaseController
 {
@@ -13,19 +14,12 @@ class Controller extends BaseController
 
     protected $forceJson = false;
 
-    public function __construct()
-    { }
-
     public function response($message, $data = null, $statusCode = 200)
     {
         $statusCode = $statusCode != 0 ? $statusCode : 500;
         $result = $statusCode < 300 ? 'data' : 'error';
-
         $response = response();
-
-
-
-        if (\Request::isJson() || $this->forceJson) {
+        if (Request::isJson() || $this->forceJson) {
             $response = $response->json([
                 'message' => $message,
                 $result => $data,
@@ -36,7 +30,6 @@ class Controller extends BaseController
         } else {
             abort($statusCode, $message);
         }
-
         return $response;
     }
 

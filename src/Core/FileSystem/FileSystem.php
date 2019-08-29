@@ -2,15 +2,15 @@
 
 namespace Ximdex\Core\FileSystem;
 
-use Xfind\Core\Utils\DateHelpers;
+use Ximdex\Core\Utils\DateHelpers;
 use Intervention\Image\Facades\Image;
-use Ximdex\Core\FileSystem\MimeTypes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 class FileSystem
 {
     protected $configs = null;
+    
     protected $disk = 'default';
 
     public function __construct($configs, string $disk = 'default')
@@ -101,8 +101,7 @@ class FileSystem
     public function type($data)
     {
         $mimeTypes = new MimeTypes();
-        $type = $mimeTypes->getGroup($data);
-        return $type;
+        return $mimeTypes->getGroup($data);
     }
 
     public function fileData(string $path)

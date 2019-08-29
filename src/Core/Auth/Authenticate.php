@@ -4,6 +4,7 @@ namespace Ximdex\Core\Auth;
 
 use Ximdex\Traits\Tokenizer;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Ximdex\Core\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -23,9 +24,8 @@ class Authenticatable extends Model implements
     public static function create(array $attributes)
     {
         $attributes['api_token'] = static::generateToken();
-        $attributes['password'] = \Hash::make($attributes['password']);
-        $model = static::query()->create($attributes);
-        return $model;
+        $attributes['password'] = Hash::make($attributes['password']);
+        return static::query()->create($attributes);
     }
     
     public function update(array $attributes = [], array $options = [])

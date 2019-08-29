@@ -7,8 +7,6 @@ use Ximdex\Core\Database\Eloquent\Model;
 
 class Node extends Model
 {
-    protected $table = 'nodes';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -19,7 +17,7 @@ class Node extends Model
         'name',
     ];
 
-    /*
+    /**
      * @inheritDoc
      */
     protected $hidden = [
@@ -45,7 +43,8 @@ class Node extends Model
         'icon' => "nodes",
         'isHidden' => true,
         'isPublishable' => false,
-        'isCacheable' => true
+        'isCacheable' => true,
+        'isVersionable' => false
     ];
 
     protected $_relations = [
@@ -64,7 +63,6 @@ class Node extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-
         $this->attributes = array_merge($this->attributes, [
             'node_type_id' => NodeType::where('type', class_basename(static::class))->select('id')->first()->id
         ]);
@@ -78,7 +76,6 @@ class Node extends Model
     protected static function boot()
     {
         parent::boot();
-
         static::addGlobalScope(new NodeTypeScope);
     }
 
@@ -108,5 +105,11 @@ class Node extends Model
     public function getLastVersionAttribute()
     {
         return $this->version()->orderBy('major', 'asc')->first();
+    }
+    
+    public function dependencies()
+    {
+        // TODO ajlucena
+        return $this->belongsToMany(Node::class);
     }
 }

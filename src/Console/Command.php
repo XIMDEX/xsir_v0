@@ -3,6 +3,7 @@
 namespace Ximdex\Console;
 
 use Illuminate\Console\Parser;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Console\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
@@ -41,7 +42,7 @@ class Command extends BaseCommand
     protected function addDefaultParams()
     {
         // Parse the command name and params and return an rray with [name, arguments, options]
-        [$name, $arguments, $options] = Parser::parse("{$this->name} {$this->defaultParams}");
+        [, $arguments, $options] = Parser::parse("{$this->name} {$this->defaultParams}");
 
         // Add arguments and options to current command
         $this->getDefinition()->addArguments($arguments);
