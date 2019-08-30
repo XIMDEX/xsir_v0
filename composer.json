@@ -7,6 +7,10 @@
         {
             "name": "Alejandro de Tovar",
             "email": "venespana159@gmail.com"
+        },
+        {
+            "name": "Antonio J. Lucena",
+            "email": "ajlucena78@gmail.com"
         }
     ],
     "minimum-stability": "dev",
