@@ -19,6 +19,7 @@ before_install:
 
 before_script:
   - composer create-project --prefer-dist laravel/laravel laravel
+  - ls -la
   - mv xsir/.env.travis laravel/.env
   - mv xsir/phpunit.travis.xml laravel/phpunit.xml
   - cd laravel
