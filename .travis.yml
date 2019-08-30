@@ -12,16 +12,20 @@ services:
 before_install:
   - composer self-update
   - mysql -e 'CREATE DATABASE laravel;'
+  - mkdir xsir
+  - shopt -s extglob
+  - mv !(xsir) xsir
+  - cd ../
 
 before_script:
   - composer create-project --prefer-dist laravel/laravel laravel
-  - mv .env.travis laravel/.env
-  - mv phpunit.travis.xml laravel/phpunit.xml
+  - mv xsir/.env.travis laravel/.env
+  - mv xsir/phpunit.travis.xml laravel/phpunit.xml
   - cd laravel
-  - composer config repositories.repo-name path ../.
+  - composer config repositories.packages path ../xsir/.
   - cat composer.json
   - composer require ximdex/semantic-information-repository dev-develop
-  - composer update --no-interaction
+  - composer install --no-interaction
   - php artisan key:generate
   - php artisan migrate
 
