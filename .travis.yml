@@ -10,21 +10,20 @@ services:
 #   mariadb: '10.3'
 
 before_install:
-  - composer self-update
-  - mysql -e 'CREATE DATABASE laravel;'
   - mkdir xsir
   - shopt -s extglob
   - mv !(xsir) xsir
-  - cd ../
+  - ls -la
+  - ls -la xsir
+  - composer self-update
+  - mysql -e 'CREATE DATABASE laravel;'
 
 before_script:
   - composer create-project --prefer-dist laravel/laravel laravel
-  - ls -la
-  - ls -la xsir
-  - mv xsir/.env.travis laravel/.env
+  - mv .env.travis laravel/.env
   - mv xsir/phpunit.travis.xml laravel/phpunit.xml
   - cd laravel
-  - composer config repositories.packages path ../xsir/.
+  - composer config repositories.packages path ../.
   - cat composer.json
   - composer require ximdex/semantic-information-repository dev-develop
   - composer install --no-interaction
@@ -37,8 +36,7 @@ script:
 notifications:
   email:
     recipients:
-      # - travis@ximdex.com
-      - ajlucena@ximdex.com
+      - travis@ximdex.com
     on_success: change
     on_failure: always
   slack:
