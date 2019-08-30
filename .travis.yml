@@ -23,7 +23,7 @@ before_script:
   - mv .env.travis laravel/.env
   - mv xsir/phpunit.travis.xml laravel/phpunit.xml
   - cd laravel
-  - composer config repositories.packages path ../.
+  - composer config repositories.packages path ../xsir/.
   - cat composer.json
   - composer require ximdex/semantic-information-repository dev-develop
   - composer install --no-interaction
