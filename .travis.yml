@@ -10,18 +10,15 @@ services:
 #   mariadb: '10.3'
 
 before_install:
-  - mv * packages
-  - mv packages/* packages/xsir
   - composer self-update
   - mysql -e 'CREATE DATABASE laravel;'
 
 before_script:
   - composer create-project --prefer-dist laravel/laravel laravel
-  - cd packages/xsir
-  - mv .env.travis ../../laravel/.env
-  - mv phpunit.travis.xml ../../laravel/phpunit.xml
-  - cd ../../laravel
-  - composer config repositories.repo-name path ../packages/*
+  - mv .env.travis laravel/.env
+  - mv phpunit.travis.xml laravel/phpunit.xml
+  - cd laravel
+  - composer config repositories.repo-name path ../
   - composer require ximdex/semantic-information-repository dev-develop
   - composer install --no-interaction
   - php artisan key:generate

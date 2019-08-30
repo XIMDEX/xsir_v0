@@ -62,11 +62,9 @@ class Command extends BaseCommand
     protected function message(string $message, string $type = 'info', bool $force = false)
     {
         $method =  method_exists($this, $type) ? $type : 'info';
-
         if ($this->option('verbose') || $force) {
             $this->{$method}($message);
         }
-
         $this->log($message, $type, $force);
     }
 
@@ -97,7 +95,6 @@ class Command extends BaseCommand
         if ($this->option('log')) {
             $logger = Log::channel($this->logChannel);
             $method = method_exists($logger, $type) ? $type : 'info';
-
             $logger->{$method}($message);
         }
     }
