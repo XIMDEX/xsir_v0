@@ -19,9 +19,9 @@ before_script:
   - mv phpunit.travis.xml laravel/phpunit.xml
   - cd laravel
   - composer config repositories.repo-name path ../.
-  - composer require ximdex/semantic-information-repository dev-develop
   - cat composer.json
-  - composer install --no-interaction
+  - composer require ximdex/semantic-information-repository dev-develop
+  - composer update --no-interaction
   - php artisan key:generate
   - php artisan migrate
 
