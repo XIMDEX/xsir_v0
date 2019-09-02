@@ -17,7 +17,7 @@ before_install:
   - ls -la
   - ls -la xsir
   - composer self-update
-  - mysql -e 'CREATE DATABASE laravel;'
+  - mysql -e "CREATE DATABASE laravel;"
 
 before_script:
   - composer create-project --prefer-dist laravel/laravel laravel
@@ -26,7 +26,7 @@ before_script:
   - cd laravel
   - composer config repositories.packages path ../xsir/.
   - cat composer.json
-  - composer require ximdex/semantic-information-repository dev-develop
+  - composer require ximdex/semantic-information-repository "*"
   - php artisan key:generate
   - php artisan migrate
 
