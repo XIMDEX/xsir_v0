@@ -13,6 +13,7 @@ before_install:
   - mkdir xsir
   - shopt -s extglob
   - mv !(xsir) xsir
+  - mv .git xsir
   - ls -la
   - ls -la xsir
   - composer self-update
@@ -26,7 +27,6 @@ before_script:
   - composer config repositories.packages path ../xsir/.
   - cat composer.json
   - composer require ximdex/semantic-information-repository dev-develop
-  - composer install --no-interaction
   - php artisan key:generate
   - php artisan migrate
 
