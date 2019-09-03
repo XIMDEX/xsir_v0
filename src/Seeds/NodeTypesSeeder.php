@@ -2,6 +2,7 @@
 
 namespace Ximdex\Seeds;
 
+use Ximdex\Models\Node;
 use Ximdex\Models\NodeType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -16,71 +17,71 @@ class NodeTypesSeeder extends Seeder
     public function run()
     {
         $type = null;
-        $parent = 0;
-        $path =  __DIR__ . '/../Models';
-
+        $parent = null;
+        $nodes = $this->getNodeTypes(dirname(__DIR__), 'Models');
         DB::beginTransaction();
-
         try {
-            foreach ($this->getNodeTypes($path) as $node) {
-                ['level' => $level, 'class' => $class] = $node;
+            foreach ($nodes as $node) {
+                [
+                    'level' => $level,
+                    'class' => $class
+                ] = $node;
                 $type = class_basename($class);
                 $base = explode('\\', str_replace('Ximdex\\Models', '', $class))[$level] ?? null;
-
                 if ($base === null) {
                     continue;
                 }
-
-                if (!empty($base)) {
+                if (! empty($base)) {
                     $nodeType = NodeType::where('type', 'like', $base)->firstOrFail();
                     $parent = $nodeType->id;
                 }
-
                 $node = NodeType::where('parent_id', $parent)->where('type', $type)->first();
                 if ($node) {
                     continue;
                 }
-                
                 NodeType::create([
                     'parent_id' => $parent,
                     'type' => $type,
                     'namespace' => str_replace_last("\\{$type}", '', $class)
                 ]);
             }
+            DB::commit();
         } catch (\Exception $ex) {
+            echo $ex->getMessage();
             DB::rollBack();
         }
-
-        DB::commit();
     }
 
-    private function getNodeTypes(string $path, int $level = 0) : array
+    private function getNodeTypes(string $path, string $folder, int $level = 0): array
     {
         $result = [];
-        foreach (scandir($path, SCANDIR_SORT_NONE) as $file) {
-            if (in_array($file, ['.', '..'])) {
+        foreach (scandir("{$path}/{$folder}", SCANDIR_SORT_NONE) as $file) {
+            if (in_array($file, [
+                '.',
+                '..'
+            ])) {
                 continue;
             }
-            
+            $filepath = "{$path}/{$folder}/{$file}";
             try {
-                $result = array_merge($result, $this->getNodeTypes("{$path}/{$file}", $level + 1));
-            } catch (\ErrorException $ex) {
-                $dir = str_replace_first('\\', '', str_replace('/', '\\', explode('..', $path)[1]));
-                $class = "Ximdex\\{$dir}\\" . str_replace_last('.php', '', $file);
-
-                if ((new $class) instanceof \Ximdex\Models\Node) {
-                    $result[] = [
-                        'level' => $level,
-                        'class' => $class
-                    ];
+                if (is_dir($filepath)) {
+                    $result = array_merge($result, $this->getNodeTypes($path, "{$folder}/{$file}", $level + 1));
+                } else {
+                    $dir = str_replace('/', '\\', $folder);
+                    $class = "Ximdex\\{$dir}\\" . str_replace_last('.php', '', $file);
+                    if (strcmp(Node::class, $class) == 0 || is_subclass_of($class, Node::class)) {
+                        $result[] = [
+                            'level' => $level,
+                            'class' => $class
+                        ];
+                    }
                 }
+            } catch (\ErrorException $ex) {
+                echo $ex->getMessage();
             }
         }
-        
-        $result = array_values(array_sort($result, function ($value) {
+        return array_values(array_sort($result, function ($value) {
             return $value['level'];
         }));
-
-        return $result;
     }
 }

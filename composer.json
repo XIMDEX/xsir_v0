@@ -1,5 +1,5 @@
 {
-    "name": "ximdex/semantic_information_repository",
+    "name": "ximdex/semantic-information-repository",
     "description": "Ximdex base core",
     "type": "library",
     "license": "AGPL-3.0",
@@ -7,6 +7,10 @@
         {
             "name": "Alejandro de Tovar",
             "email": "venespana159@gmail.com"
+        },
+        {
+            "name": "Antonio J. Lucena",
+            "email": "ajlucena78@gmail.com"
         }
     ],
     "minimum-stability": "dev",
@@ -23,8 +27,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Ximdex\\ServiceProvider",
-                "XmlMiddleware\\XmlRequestServiceProvider"
+                "Ximdex\\ServiceProvider"
             ]
         }
     }

@@ -16,8 +16,8 @@ class CreateNodeTable extends Migration
         Schema::create('nodes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('parent_id')
-                ->default(0)
-                ->comment('Parent node in the tree view');
+                ->comment('Parent node in the tree view')
+                ->nullable();
             $table->unsignedInteger('node_type_id')
                 ->comment('The node type relation');
             $table->string('name', 255)
@@ -29,8 +29,14 @@ class CreateNodeTable extends Migration
             $table->foreign('node_type_id')
                 ->references('id')
                 ->on('node_types')
-                ->onDelete('cascade')
-                ->nullable();
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
+            
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on('nodes')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
         });
     }
 

@@ -33,8 +33,8 @@ class CreateVersionTable extends Migration
             $table->foreign('node_id')
                 ->references('id')
                 ->on('nodes')
-                ->onDelete('cascade')
-                ->nullable();
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
         });
     }
 
@@ -45,6 +45,6 @@ class CreateVersionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nodes');
+        Schema::dropIfExists('versions');
     }
 }

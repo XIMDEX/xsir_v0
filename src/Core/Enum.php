@@ -6,8 +6,12 @@ use ReflectionClass;
 
 abstract class Enum
 {
-    private static $constCacheArray;
     protected $current_constant;
+    
+    private static $constCacheArray;
+    
+    abstract protected static function data();
+    
     public function __construct($constant, $strict = true)
     {
         if ($strict && !static::isValidValue($constant)) {
@@ -18,15 +22,10 @@ abstract class Enum
             $this->getData();
         }
     }
-    private function getData()
-    {
-        $current = static::data()[$this->current_constant];
-        foreach ($current as $key => $value) {
-            $this->{strtolower($key)} = $value;
-        }
-    }
+    
     /**
      * Get all constants in the class
+     * 
      * @return array
      * @throws null
      */
@@ -42,8 +41,10 @@ abstract class Enum
         }
         return self::$constCacheArray[$calledClass];
     }
+    
     /**
      * Check if enum name exist in the class
+     * 
      * @param string $name Name of enum value
      * @param bool $strict If it is false, it ignore case sensitive.
      * @return bool
@@ -57,6 +58,7 @@ abstract class Enum
         $keys = array_map('strtolower', array_keys($constants));
         return in_array(strtolower($name), $keys);
     }
+    
     /**
      * Check if enum value exist in the class
      *
@@ -69,6 +71,7 @@ abstract class Enum
         $values = array_values(self::getConstants());
         return in_array($value, $values, $strict);
     }
+    
     public static function getValues($attribute, array $less = [])
     {
         $values = [];
@@ -79,12 +82,21 @@ abstract class Enum
         }
         return $values;
     }
-    abstract protected static function data();
+    
     public function __call($name, $arguments)
     {
         $func = strtolower(str_replace('get', '', $name));
         if (isset($this->$func)) {
             return $this->$func;
+        }
+        throw new \BadMethodCallException("Method {$name} does not exists");
+    }
+    
+    private function getData()
+    {
+        $current = static::data()[$this->current_constant];
+        foreach ($current as $key => $value) {
+            $this->{strtolower($key)} = $value;
         }
     }
 }

@@ -138,7 +138,7 @@ class Model extends BaseModel
         $table = $model::tableName() ?? $relation;
         $fields = '';
         if (count($select) > 0) {
-            if (($key = array_search('id', $select)) == false) {
+            if (array_search('id', $select) === false) {
                 array_unshift($select, 'id');
             }
             $fields = ":$table." . implode(",$table.", $select);

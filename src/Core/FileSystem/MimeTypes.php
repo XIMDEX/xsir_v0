@@ -13,7 +13,7 @@ class MimeTypes extends MMimeTypes
     {
         $customMimes = null;
         $path = storage_path(static::$customMimesFolder . "/" . static::$customMimesFile);
-        if (\File::exists($path)) {
+        if (File::exists($path)) {
             $builder = MimeMappingBuilder::load($path);
             $customMimes = $builder->getMapping();
         }

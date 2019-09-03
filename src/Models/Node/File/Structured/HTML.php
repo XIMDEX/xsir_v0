@@ -14,6 +14,7 @@ class HTML extends Structured
     protected $nodeProperties = [
         'icon' => 'code_file',
         'isHidden' => false,
-        'isPublishable' => true
+        'isPublishable' => true,
+        'isVersionable' => true
     ];
 }

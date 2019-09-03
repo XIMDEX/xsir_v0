@@ -1,0 +1,41 @@
+language: php
+
+php:
+  - 7.3
+
+services:
+  - mysql
+
+# addons:
+#   mariadb: '10.3'
+
+before_install:
+  - mkdir xsir
+  - shopt -s extglob
+  - mv !(xsir) xsir
+  - mv .git xsir
+  - composer self-update
+  - mysql -e "CREATE DATABASE laravel;"
+
+before_script:
+  - composer create-project --prefer-dist laravel/laravel laravel
+  - mv .env.travis laravel/.env
+  - mv xsir/phpunit.travis.xml laravel/phpunit.xml
+  - cd laravel
+  - composer config repositories.packages path ../xsir/.
+  - composer require ximdex/semantic-information-repository "*"
+  - php artisan key:generate
+  - php artisan migrate
+
+script:
+  - vendor/bin/phpunit
+
+notifications:
+  email:
+    recipients:
+      - travis@ximdex.com
+    on_success: change
+    on_failure: always
+  slack:
+    rooms:
+      - ximdexteam:tJAT66V6VSJeHR3H2CDCImnK#travis-ci
