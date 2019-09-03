@@ -7,7 +7,7 @@ use Ximdex\Models\Node;
 class Container extends Node
 {
     /**
-     * Set bassic properties to the node
+     * Set basic properties to the node
      *
      * @var array
      */

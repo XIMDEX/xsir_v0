@@ -14,8 +14,6 @@ before_install:
   - shopt -s extglob
   - mv !(xsir) xsir
   - mv .git xsir
-  - ls -la
-  - ls -la xsir
   - composer self-update
   - mysql -e "CREATE DATABASE laravel;"
 
@@ -25,7 +23,6 @@ before_script:
   - mv xsir/phpunit.travis.xml laravel/phpunit.xml
   - cd laravel
   - composer config repositories.packages path ../xsir/.
-  - cat composer.json
   - composer require ximdex/semantic-information-repository "*"
   - php artisan key:generate
   - php artisan migrate

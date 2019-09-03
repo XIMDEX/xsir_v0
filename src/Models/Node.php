@@ -8,7 +8,7 @@ use Ximdex\Core\Database\Eloquent\Model;
 class Node extends Model
 {
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are mass assignable
      *
      * @var array
      */
@@ -35,7 +35,7 @@ class Node extends Model
     ];
 
     /**
-     * Set bassic properties to the node
+     * Set basic properties to the node
      *
      * @var array
      */
@@ -69,7 +69,7 @@ class Node extends Model
     }
 
     /**
-     * The "booting" method of the model.
+     * The "booting" method of the model
      *
      * @return void
      */
@@ -109,7 +109,6 @@ class Node extends Model
     
     public function dependencies()
     {
-        // TODO ajlucena
-        return $this->belongsToMany(Node::class);
+        return $this->belongsToMany(Node::class, 'node_dependencies', 'related_node_id');
     }
 }
