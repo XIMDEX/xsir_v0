@@ -53,6 +53,15 @@ class NodeTest extends TestCase
         $this->assertTrue($res);
     }
     
+    private function createNode(string $name, string $class = Node::class): int
+    {
+        $node = (new $class);
+        $node->name = $name;
+        $res = $node->save();
+        $this->assertTrue($res);
+        return $node->id;
+    }
+    
     /**
      * Load a node by ID field and optional class
      * 
