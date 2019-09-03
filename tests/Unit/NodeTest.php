@@ -37,7 +37,7 @@ class NodeTest extends TestCase
      */
     public function testNodeDependencies(): void
     {
-        $node = $this->loadNode();
+        $node = $this->loadNode(self::$id);
         foreach ($node->dependencies as $dependency) {
             $this->assertInstanceOf('Node', $dependency);
         }
@@ -48,14 +48,21 @@ class NodeTest extends TestCase
      */
     public function testNodeDeletion(): void
     {
-        $node = $this->loadNode();
+        $node = $this->loadNode(self::$id);
         $res = $node->delete();
         $this->assertTrue($res);
     }
     
-    private function loadNode(): ?Node
+    /**
+     * Load a node by ID field and optional class
+     * 
+     * @param int $id
+     * @param string $class
+     * @return Node|NULL
+     */
+    private function loadNode(int $id, string $class = Node::class): ?Node
     {
-        $node = Node::find(self::$id);
+        $node = (new $class)::find($id);
         $this->assertIsObject($node);
         return $node;
     }

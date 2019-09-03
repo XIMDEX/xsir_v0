@@ -8,6 +8,13 @@ use Ximdex\Core\Database\Eloquent\Model;
 class Node extends Model
 {
     /**
+     * This property overwrite the inherited classes to save always the data in the Nodes table
+     * 
+     * @var string
+     */
+    protected $table = 'nodes';
+    
+    /**
      * The attributes that are mass assignable
      *
      * @var array
