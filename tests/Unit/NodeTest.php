@@ -25,11 +25,7 @@ class NodeTest extends TestCase
      */
     public function testNodeCreation(): void
     {
-        $node = new Container();
-        $node->name = 'HTML container';
-        $res = $node->save();
-        $this->assertTrue($res);
-        self::$id = $node->id;
+        self::$id = $this->createNode('HTML container', Container::class);
     }
     
     /**
@@ -53,6 +49,13 @@ class NodeTest extends TestCase
         $this->assertTrue($res);
     }
     
+    /**
+     * Generic node creator by given class name
+     * 
+     * @param string $name
+     * @param string $class
+     * @return int
+     */
     private function createNode(string $name, string $class = Node::class): int
     {
         $node = (new $class);
