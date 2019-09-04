@@ -7,7 +7,7 @@ use Ximdex\Models\Node\File\Structured;
 class HTML extends Structured
 {
     /**
-     * Set bassic properties to the node
+     * Set basic properties to the node
      *
      * @var array
      */

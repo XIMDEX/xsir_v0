@@ -20,6 +20,7 @@ class Node extends Model
      * @var array
      */
     protected $fillable = [
+        'parent_id',
         'parent',
         'name',
     ];
@@ -114,8 +115,23 @@ class Node extends Model
         return $this->version()->orderBy('major', 'asc')->first();
     }
     
+    /**
+     * Get node dependencies, these are nodes referenced in the current node
+     *  
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function dependencies()
     {
         return $this->belongsToMany(Node::class, 'node_dependencies', 'related_node_id');
+    }
+    
+    /**
+     * Get the parent node that holds this current node
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Node::class, 'parent_id');
     }
 }
