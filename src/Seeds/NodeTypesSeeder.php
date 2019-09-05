@@ -5,6 +5,7 @@ namespace Ximdex\Seeds;
 use Ximdex\Models\Node;
 use Ximdex\Models\NodeType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -81,7 +82,7 @@ class NodeTypesSeeder extends Seeder
                 echo $ex->getMessage();
             }
         }
-        return array_values(array_sort($result, function ($value) {
+        return array_values(Arr::sort($result, function ($value) {
             return $value['level'];
         }));
     }
