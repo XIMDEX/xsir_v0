@@ -5,6 +5,8 @@ namespace Ximdex\Seeds;
 use Ximdex\Models\Node;
 use Ximdex\Models\NodeType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class NodeTypesSeeder extends Seeder
@@ -42,7 +44,7 @@ class NodeTypesSeeder extends Seeder
                 NodeType::create([
                     'parent_id' => $parent,
                     'type' => $type,
-                    'namespace' => str_replace_last("\\{$type}", '', $class)
+                    'namespace' => Str::replaceLast("\\{$type}", '', $class)
                 ]);
             }
             DB::commit();
@@ -68,7 +70,7 @@ class NodeTypesSeeder extends Seeder
                     $result = array_merge($result, $this->getNodeTypes($path, "{$folder}/{$file}", $level + 1));
                 } else {
                     $dir = str_replace('/', '\\', $folder);
-                    $class = "Ximdex\\{$dir}\\" . str_replace_last('.php', '', $file);
+                    $class = "Ximdex\\{$dir}\\" . Str::replaceLast('.php', '', $file);
                     if (strcmp(Node::class, $class) == 0 || is_subclass_of($class, Node::class)) {
                         $result[] = [
                             'level' => $level,
@@ -80,7 +82,7 @@ class NodeTypesSeeder extends Seeder
                 echo $ex->getMessage();
             }
         }
-        return array_values(array_sort($result, function ($value) {
+        return array_values(Arr::sort($result, function ($value) {
             return $value['level'];
         }));
     }

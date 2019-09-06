@@ -17,7 +17,7 @@ class Command extends BaseCommand
      *
      * @var string
      */
-    protected $logChannel = 'commands';
+    protected $logChannel = 'single';
 
     /**
      * Default params to commands

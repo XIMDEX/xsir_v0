@@ -1,13 +1,24 @@
 language: php
 
 php:
+  - 7.1
+  - 7.2
   - 7.3
 
-services:
-  - mysql
+env:
+  - LARAVEL_VERSION=5.8.*
+  - LARAVEL_VERSION=6.0.*
 
-# addons:
-#   mariadb: '10.3'
+matrix:
+  exclude:
+    - php: 7.1
+      env: LARAVEL_VERSION=6.0.*
+
+# services:
+#   - mysql
+
+addons:
+  mariadb: '10.3'
 
 before_install:
   - mkdir xsir
@@ -18,7 +29,7 @@ before_install:
   - mysql -e "CREATE DATABASE laravel;"
 
 before_script:
-  - composer create-project --prefer-dist laravel/laravel laravel
+  - composer create-project --prefer-dist laravel/laravel laravel $LARAVEL_VERSION
   - mv .env.travis laravel/.env
   - mv xsir/phpunit.travis.xml laravel/phpunit.xml
   - cd laravel
