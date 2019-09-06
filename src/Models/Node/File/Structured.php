@@ -7,10 +7,17 @@ use Ximdex\Models\Node\File;
 class Structured extends File
 {
     /**
-     * @inheritDoc
+     * Set specified properties to the node
+     * 
+     * @var array
      */
-    protected $nodeProperties = [
-        'icon' => 'structured',
-        'isHidden' => false
+    private $properties = [
+        'icon' => 'structured'
     ];
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadProperties($this->properties);
+    }
 }

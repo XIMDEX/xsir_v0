@@ -74,6 +74,29 @@ class Node extends Model
         $this->attributes = array_merge($this->attributes, [
             'node_type_id' => NodeType::where('type', class_basename(static::class))->select('id')->first()->id
         ]);
+        // $this->configure();
+    }
+
+    protected function configure(){
+        $this->nodeProperties = $this->configureProperties();
+        
+        print_r($this->nodeProperties);
+        
+        $this->_relations = $this->configureRelations();
+    }
+    
+    public function configureProperties(): array {
+        // TODO Added cache
+        $props = $this->nodeProperties;
+        if (static::class !== Node::class){
+            $class_parent = get_parent_class($this);
+            $props = array_merge((new $class_parent)->configureProperties(), $this->nodeProperties);
+        }
+        return $props;
+    }
+    
+    public function configureRelations(): array{
+        return $this->_relations;
     }
 
     /**
@@ -133,5 +156,16 @@ class Node extends Model
     public function parent()
     {
         return $this->belongsTo(Node::class, 'parent_id');
+    }
+    
+    public static function instanceFromNodeType(Node $node): Object
+    {
+        $class = "{$node->node_type->namespace}\\{$node->type}";
+        return $class::findOrFail($node->id);
+    }
+    
+    protected function loadProperties(array $properties = [])
+    {
+        $this->nodeProperties = $properties + $this->nodeProperties;
     }
 }

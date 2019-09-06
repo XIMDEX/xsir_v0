@@ -11,9 +11,14 @@ class Templates extends Node
      *
      * @var array
      */
-    protected $nodeProperties = [
+    private $properties = [
         'icon' => 'template',
-        'isHidden' => false,
-        'isPublishable' => false
+        'isHidden' => false
     ];
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadProperties($this->properties);
+    }
 }

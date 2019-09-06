@@ -7,10 +7,17 @@ use Ximdex\Models\Node\File;
 class NoStructured extends File
 {
     /**
-     * @inheritDoc
+     * Set specified properties to the node
+     * 
+     * @var array
      */
-    protected $nodeProperties = [
-        'icon' => 'nostructured',
-        'isHidden' => false
+    private $properties = [
+        'icon' => 'nostructured'
     ];
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadProperties($this->properties);
+    }
 }

@@ -34,6 +34,7 @@ class NodeTest extends TestCase
         $html = $this->loadNode(self::$htmlId);
         $this->assertInstanceOf(Node::class, $html->parent);
         $this->assertEquals('Container', $html->parent->type);
+        
     }
 
     /**
@@ -41,7 +42,7 @@ class NodeTest extends TestCase
      */
     public function testNodeDependencies(): void
     {
-        $node = $this->loadNode(self::$containerId);
+        $node = $this->loadNode(self::$htmlId);
         foreach ($node->dependencies as $dependency) {
             $this->assertInstanceOf(Node::class, $dependency);
         }

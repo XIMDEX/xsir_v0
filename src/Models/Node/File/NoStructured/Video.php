@@ -7,11 +7,19 @@ use Ximdex\Models\Node\File\NoStructured;
 class Video extends NoStructured
 {
     /**
-     * @inheritDoc
+     * /**
+     * Set specified properties to the node
+     * 
+     * @var array
      */
-    protected $nodeProperties = [
+    private $properties = [
         'icon' => 'video_file',
-        'isHidden' => false,
         'isPublishable' => true
     ];
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadProperties($this->properties);
+    }
 }

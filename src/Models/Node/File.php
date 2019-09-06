@@ -7,10 +7,18 @@ use Ximdex\Models\Node;
 class File extends Node
 {
     /**
-     * @inheritDoc
+     * Set specified properties to the node
+     * 
+     * @var array
      */
-    protected $nodeProperties = [
+    private $properties = [
         'icon' => 'file',
         'isHidden' => false
     ];
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadProperties($this->properties);
+    }
 }

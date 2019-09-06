@@ -11,10 +11,15 @@ class HTML extends Structured
      *
      * @var array
      */
-    protected $nodeProperties = [
+    private $properties = [
         'icon' => 'code_file',
-        'isHidden' => false,
         'isPublishable' => true,
         'isVersionable' => true
     ];
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadProperties($this->properties);
+    }
 }
