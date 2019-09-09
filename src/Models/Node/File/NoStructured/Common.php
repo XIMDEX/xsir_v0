@@ -12,8 +12,7 @@ class Common extends NoStructured
      * @var array
      */
     private $properties = [
-        'icon' => 'common_file',
-        'isPublishable' => true
+        'icon' => 'common_file'
     ];
     
     public function __construct()

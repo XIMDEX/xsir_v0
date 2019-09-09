@@ -6,13 +6,12 @@ use Tests\TestCase;
 use Ximdex\Seeds\NodeTypesSeeder;
 use Ximdex\Models\Node;
 use Ximdex\Models\Node\Container;
+use Ximdex\Models\Node\File\NoStructured\Image;
 use Ximdex\Models\Node\File\Structured\HTML;
 
 class NodeTest extends TestCase
 {
-    private static $containerId;
-
-    private static $htmlId;
+    private static $nodes = [];
 
     /**
      * Generate node types with seeder test
@@ -24,17 +23,17 @@ class NodeTest extends TestCase
     }
 
     /**
-     * Nodes creation test
+     * Nodes creation test and node types check
      */
     public function testNodesCreation(): void
     {
-        self::$containerId = $this->createNode('HTML container', Container::class);
-        $container = $this->loadNode(self::$containerId);
-        self::$htmlId = $this->createNode('HTML document', HTML::class, $container);
-        $html = $this->loadNode(self::$htmlId);
+        self::$nodes['HTMLcontainer'] = $this->createNode('HTML container', Container::class);
+        $container = $this->loadNode(self::$nodes['HTMLcontainer']);
+        self::$nodes['index'] = $this->createNode('index.html', HTML::class, $container);
+        $html = $this->loadNode(self::$nodes['index']);
         $this->assertInstanceOf(Node::class, $html->parent);
-        $this->assertEquals('Container', $html->parent->type);
-        
+        $parent = $this->loadNode($html->parent->id);
+        $this->assertEquals(class_basename(Container::class), $parent->type);
     }
 
     /**
@@ -42,10 +41,19 @@ class NodeTest extends TestCase
      */
     public function testNodeDependencies(): void
     {
-        $node = $this->loadNode(self::$htmlId);
-        foreach ($node->dependencies as $dependency) {
+        $imageId = $this->createNode('beach.jpg', Image::class);
+        $htmlId = $this->createNode('contact.html', HTML::class, $this->loadNode(self::$nodes['HTMLcontainer']));
+        $html = $this->loadNode(self::$nodes['index']);
+        $html->dependencies()->syncWithoutDetaching([$imageId, $htmlId]);
+        $html->load('dependencies');
+        foreach ($html->dependencies as $dependency) {
             $this->assertInstanceOf(Node::class, $dependency);
+            self::$nodes[$dependency->name] = $dependency->id;
         }
+        $this->assertCount(2, $html->dependencies);
+        $html->dependencies()->detach();
+        $html->load('dependencies');
+        $this->assertCount(0, $html->dependencies);
     }
 
     /**
@@ -53,10 +61,9 @@ class NodeTest extends TestCase
      */
     public function testNodesDeletion(): void
     {
-        $node = $this->loadNode(self::$htmlId);
-        $this->assertTrue($node->delete());
-        $node = $this->loadNode(self::$containerId);
-        $this->assertTrue($node->delete());
+        foreach (array_reverse(self::$nodes) as $id) {
+            $this->assertTrue($this->loadNode($id)->delete());
+        }
     }
 
     /**
@@ -80,19 +87,15 @@ class NodeTest extends TestCase
     }
 
     /**
-     * Load a node by ID field and optional class
+     * Load a node by ID field returning an instance for its node type
      *
      * @param int $id
-     * @param string $class
      * @return Node|NULL
      */
-    private function loadNode(int $id, string $class = Node::class): ?Node
+    private function loadNode(int $id): ?Node
     {
-        $node = (new $class())::find($id);
-        $this->assertInstanceOf(Node::class, $node);
-        if ($class != Node::class and $node->type != 'Node') {
-            $this->assertInstanceOf("{$node->node_type->namespace}\\{$node->type}", $node);
-        }
+        $node = Node::instanceFromNodeType($id);
+        $this->assertInstanceOf("{$node->node_type->namespace}\\{$node->type}", $node);
         return $node;
     }
 }

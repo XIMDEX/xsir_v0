@@ -13,8 +13,7 @@ class Video extends NoStructured
      * @var array
      */
     private $properties = [
-        'icon' => 'video_file',
-        'isPublishable' => true
+        'icon' => 'video_file'
     ];
     
     public function __construct()

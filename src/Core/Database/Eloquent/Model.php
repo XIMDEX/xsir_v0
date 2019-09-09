@@ -37,6 +37,7 @@ class Model extends BaseModel
                 $func = $data['type'];
                 switch ($func) {
                     case 'belongsTo':
+
                         $result = $this->$func(
                             $data['model'],
                             $data['fk'] ?? null,

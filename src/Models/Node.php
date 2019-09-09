@@ -74,40 +74,6 @@ class Node extends Model
         $this->attributes = array_merge($this->attributes, [
             'node_type_id' => NodeType::where('type', class_basename(static::class))->select('id')->first()->id
         ]);
-        // $this->configure();
-    }
-
-    protected function configure(){
-        $this->nodeProperties = $this->configureProperties();
-        
-        print_r($this->nodeProperties);
-        
-        $this->_relations = $this->configureRelations();
-    }
-    
-    public function configureProperties(): array {
-        // TODO Added cache
-        $props = $this->nodeProperties;
-        if (static::class !== Node::class){
-            $class_parent = get_parent_class($this);
-            $props = array_merge((new $class_parent)->configureProperties(), $this->nodeProperties);
-        }
-        return $props;
-    }
-    
-    public function configureRelations(): array{
-        return $this->_relations;
-    }
-
-    /**
-     * The "booting" method of the model
-     *
-     * @return void
-     */
-    protected static function boot()
-    {
-        parent::boot();
-        static::addGlobalScope(new NodeTypeScope);
     }
 
     public function getPropertiesAttribute() : array
@@ -140,12 +106,12 @@ class Node extends Model
     
     /**
      * Get node dependencies, these are nodes referenced in the current node
-     *  
+     * 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function dependencies()
     {
-        return $this->belongsToMany(Node::class, 'node_dependencies', 'related_node_id');
+        return $this->belongsToMany(Node::class, 'node_dependencies', 'node_id', 'related_node_id');
     }
     
     /**
@@ -158,13 +124,42 @@ class Node extends Model
         return $this->belongsTo(Node::class, 'parent_id');
     }
     
-    public static function instanceFromNodeType(Node $node): Object
+    /**
+     * Load and return an instance of an specified node type for given node object or id code
+     * 
+     * @param int $id
+     * @param Node $node
+     * @return Object
+     */
+    public static function instanceFromNodeType(int $id = null, Node $node = null): Node
     {
+        if (! $id and ! $node) {
+            throw new \UnexpectedValueException;
+        }
+        if ($id) {
+            $node = Node::findOrFail($id);
+        }
         $class = "{$node->node_type->namespace}\\{$node->type}";
         return $class::findOrFail($node->id);
     }
     
-    protected function loadProperties(array $properties = [])
+    /**
+     * The "booting" method of the model
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new NodeTypeScope);
+    }
+    
+    /**
+     * Add specified properties to the node
+     * 
+     * @param array $properties
+     */
+    protected function loadProperties(array $properties = []): void
     {
         $this->nodeProperties = $properties + $this->nodeProperties;
     }

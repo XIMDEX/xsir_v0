@@ -12,8 +12,7 @@ class Image extends NoStructured
      * @var array
      */
     private $properties = [
-        'icon' => 'image_file',
-        'isPublishable' => true
+        'icon' => 'image_file'
     ];
     
     public function __construct()

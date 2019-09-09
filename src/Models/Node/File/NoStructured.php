@@ -12,7 +12,8 @@ class NoStructured extends File
      * @var array
      */
     private $properties = [
-        'icon' => 'nostructured'
+        'icon' => 'nostructured',
+        'isPublishable' => true
     ];
     
     public function __construct()
