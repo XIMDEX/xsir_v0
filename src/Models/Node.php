@@ -192,7 +192,7 @@ class Node extends Model
     }
     
     /**
-     * // TODO ajlucena: Try this with boot function with the deleting event
+     * // TODO ajlucena: Try this with boot function with the deleting event (https://medium.com/@c.nwaugha/delete-a-laravel-model-with-its-relations-88db34b495dd)
      * 
      * {@inheritDoc}
      * @see \Illuminate\Database\Eloquent\Model::delete()
