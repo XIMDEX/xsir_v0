@@ -6,11 +6,12 @@ use Ximdex\Models\Node\File;
 
 class NoStructured extends File
 {
-    /**
-     * @inheritDoc
-     */
-    protected $nodeProperties = [
-        'icon' => 'nostructured',
-        'isHidden' => false
-    ];
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadProperties([
+            'icon' => 'nostructured',
+            'isPublishable' => true
+        ]);
+    }
 }

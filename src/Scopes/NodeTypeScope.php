@@ -16,19 +16,19 @@ class NodeTypeScope implements Scope
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return void
      */
-    public function apply(Builder $builder, Model $model)
+    public function apply(Builder $builder, Model $model): void
     {
         $children = $this->getChildrenNodeTypes($model);
         $builder->whereIn('node_type_id', $children);
     }
 
-    private function getChildrenNodeTypes(Model $model) : array
+    private function getChildrenNodeTypes(Model $model): array
     {
         $nodeType = NodeType::where('type', 'like', class_basename($model))->first();
         return $this->cleanTree($nodeType->tree(-1));
     }
 
-    private function cleanTree(array $tree) : array
+    private function cleanTree(array $tree): array
     {
         $data = [];
         foreach ($tree as $value) {

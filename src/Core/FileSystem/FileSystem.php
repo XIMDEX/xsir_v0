@@ -13,13 +13,13 @@ class FileSystem
     
     protected $disk = 'default';
 
-    public function __construct($configs, string $disk = 'default')
+    public function __construct(array $configs = [], string $disk = 'default')
     {
         $this->setDisk($disk);
         $this->setConfigs($configs);
     }
 
-    public function setDisk(string $disk): FileSystem
+    public function setDisk(string $disk): self
     {
         $this->disk = $disk;
         return $this;
@@ -30,12 +30,14 @@ class FileSystem
         return $this->disk;
     }
 
-    public function setConfigs($configs): FileSystem
+    public function setConfigs(array $configs = []): self
     {
+        /*
         if (is_null($configs) && !is_string($configs) && !is_array($configs)) {
             $type = gettype($configs);
             throw new \InvalidArgumentException("Configs attibute only acepts string or array. Input was: {$type}");
         }
+        */
         $this->configs = [
             'disks' => [
                 $this->disk => $configs
@@ -84,7 +86,7 @@ class FileSystem
 
     public function get(string $path)
     {
-        if (!$this->exists($path)) {
+        if (! $this->exists($path)) {
             throw new FileNotFoundException("File not found on Disk: {$this->disk} at Path: {$path}");
         }
         return $this->getStorage()->get($path);
@@ -92,7 +94,7 @@ class FileSystem
 
     public function delete(string $path)
     {
-        if (!$this->exists($path)) {
+        if (! $this->exists($path)) {
             throw new FileNotFoundException("File not found on Disk: {$this->disk} at Path: {$path}");
         }
         return $this->getStorage()->delete($path);
@@ -106,13 +108,12 @@ class FileSystem
 
     public function fileData(string $path)
     {
-        if (!$this->exists($path)) {
+        if (! $this->exists($path)) {
             throw new FileNotFoundException("File not found on Disk: {$this->disk} at Path: {$path}");
         }
         $info = pathinfo($path);
         $extension = $info['extension'] ?? '';
         $type = $this->type($extension);
-
         $data = [
             'name' => $info['basename'] ?? $path,
             'extension' => $extension,
@@ -127,7 +128,7 @@ class FileSystem
         return array_merge($data, $this->extraData($type, $path));
     }
 
-    protected function fullPath($path)
+    protected function fullPath(string $path)
     {
         return $this->getStorage()->getDriver()->getAdapter()->applyPathPrefix($path);
     }
@@ -151,7 +152,6 @@ class FileSystem
     protected function extraData(?string $type, string $path)
     {
         $result = [];
-
         if (method_exists($this, $type)) {
             $result = $this->$type($path);
         }
@@ -170,11 +170,10 @@ class FileSystem
         return array_merge($data, $iptc, $exif);
     }
 
-    protected function tmp($file): string
+    protected function tmp(string $file): string
     {
-        $hash =  uniqid();
+        $hash = uniqid();
         $tmp = 'tmp';
-
         $stream = $this->getStorage()->getDriver()->readStream($file);
         Storage::put("{$tmp}/{$hash}", $stream);
         return storage_path("app/{$tmp}/{$hash}");

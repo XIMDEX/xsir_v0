@@ -4,6 +4,7 @@ namespace Ximdex\Core\Auth;
 
 use Ximdex\Traits\Tokenizer;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Ximdex\Core\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -34,7 +35,7 @@ class Authenticatable extends Model implements
         if (isset($attributes['password']) && !empty($attributes['password'])) {
             $attributes['password'] = Hash::make($attributes['password']);
         }
-        $attributes = array_only($attributes, $fillable);
+        $attributes = Arr::only($attributes, $fillable);
         return parent::update($attributes, $options);
     }
 }

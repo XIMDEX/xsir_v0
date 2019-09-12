@@ -14,11 +14,11 @@ matrix:
     - php: 7.1
       env: LARAVEL_VERSION=6.0.*
 
-# services:
-#   - mysql
+services:
+  - mysql
 
-addons:
-  mariadb: '10.3'
+# addons:
+#   mariadb: '10.3'
 
 before_install:
   - mkdir xsir

@@ -5,13 +5,12 @@ namespace Ximdex\Models\Node\File\NoStructured;
 use Ximdex\Models\Node\File\NoStructured;
 
 class Common extends NoStructured
-{
-    /**
-     * @inheritDoc
-     */
-    protected $nodeProperties = [
-        'icon' => 'common_file',
-        'isHidden' => false,
-        'isPublishable' => true
-    ];
+{   
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadProperties([
+            'icon' => 'common_file'
+        ]);
+    }
 }

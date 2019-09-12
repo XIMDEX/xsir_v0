@@ -27,9 +27,7 @@ class CreateVersionTable extends Migration
                 ->unique()
                 ->comment('Node content file');
             $table->timestamps();
-
             $table->unique(['node_id', 'major', 'minor']);
-
             $table->foreign('node_id')
                 ->references('id')
                 ->on('nodes')

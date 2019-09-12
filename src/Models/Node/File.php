@@ -6,11 +6,12 @@ use Ximdex\Models\Node;
 
 class File extends Node
 {
-    /**
-     * @inheritDoc
-     */
-    protected $nodeProperties = [
-        'icon' => 'file',
-        'isHidden' => false
-    ];
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadProperties([
+            'icon' => 'file',
+            'isHidden' => false
+        ]);
+    }
 }
