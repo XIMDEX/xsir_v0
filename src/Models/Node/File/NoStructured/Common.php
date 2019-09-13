@@ -5,20 +5,12 @@ namespace Ximdex\Models\Node\File\NoStructured;
 use Ximdex\Models\Node\File\NoStructured;
 
 class Common extends NoStructured
-{
-    /**
-     * Set specified properties to the node
-     *
-     * @var array
-     */
-    private $properties = [
-        'icon' => 'common_file',
-        'isPublishable' => true
-    ];
-    
+{   
     public function __construct()
     {
         parent::__construct();
-        $this->loadProperties($this->properties);
+        $this->loadProperties([
+            'icon' => 'common_file'
+        ]);
     }
 }

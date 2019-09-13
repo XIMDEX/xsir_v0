@@ -6,19 +6,11 @@ use Ximdex\Models\Node\File\NoStructured;
 
 class Image extends NoStructured
 {
-    /**
-     * Set specified properties to the node
-     *
-     * @var array
-     */
-    private $properties = [
-        'icon' => 'image_file',
-        'isPublishable' => true
-    ];
-    
     public function __construct()
     {
         parent::__construct();
-        $this->loadProperties($this->properties);
+        $this->loadProperties([
+            'icon' => 'image_file'
+        ]);
     }
 }

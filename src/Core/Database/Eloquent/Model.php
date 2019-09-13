@@ -2,6 +2,7 @@
 namespace Ximdex\Core\Database\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 
 class Model extends BaseModel
@@ -108,7 +109,7 @@ class Model extends BaseModel
      */
     public function update(array $attributes = [], array $options = [])
     {
-        $attributes = array_only($attributes, $this->fillable);
+        $attributes = Arr::only($attributes, $this->fillable);
         return parent::update($attributes, $options);
     }
 

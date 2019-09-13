@@ -2,18 +2,14 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use Ximdex\Seeds\NodeTypesSeeder;
 use Ximdex\Models\Node;
 use Ximdex\Models\Node\Container;
+use Ximdex\Models\Node\File\NoStructured\Image;
 use Ximdex\Models\Node\File\Structured\HTML;
 
-class NodeTest extends TestCase
+class NodeTest extends CommonTest
 {
-    private static $containerId;
-
-    private static $htmlId;
-
     /**
      * Generate node types with seeder test
      */
@@ -24,28 +20,39 @@ class NodeTest extends TestCase
     }
 
     /**
-     * Nodes creation test
+     * Nodes creation test, parent container and node types check
      */
     public function testNodesCreation(): void
     {
-        self::$containerId = $this->createNode('HTML container', Container::class);
-        $container = $this->loadNode(self::$containerId);
-        self::$htmlId = $this->createNode('HTML document', HTML::class, $container);
-        $html = $this->loadNode(self::$htmlId);
-        $this->assertInstanceOf(Node::class, $html->parent);
-        $this->assertEquals('Container', $html->parent->type);
-        
+        $container = $this->createNode('HTMLcontainer', Container::class);
+        $index = $this->createNode('index', HTML::class, $container);
+        $this->assertInstanceOf(Node::class, $index->parent);
+        $parent = $this->loadNode($index->parent->id);
+        $this->assertEquals(class_basename(Container::class), $parent->type);
     }
 
     /**
-     * Get node dependencies tests
+     * Node dependencies and referencies tests
      */
     public function testNodeDependencies(): void
     {
-        $node = $this->loadNode(self::$htmlId);
-        foreach ($node->dependencies as $dependency) {
+        $image = $this->createNode('beach.jpg', Image::class);
+        $contact = $this->createNode('contact', HTML::class, $this->loadNode(self::$nodes['HTMLcontainer']));
+        $index = $this->loadNode(self::$nodes['index']);
+        $index->dependencies()->syncWithoutDetaching([$image->id, $contact->id]);
+        $index->load('dependencies');
+        foreach ($index->dependencies as $dependency) {
             $this->assertInstanceOf(Node::class, $dependency);
+            self::$nodes[$dependency->name] = $dependency->id;
         }
+        $this->assertCount(2, $index->dependencies);
+        // $contact = $this->loadNode($contact->id);
+        $contact->dependencies()->syncWithoutDetaching($image->id);
+        // $image = $this->loadNode($imageId);
+        $this->assertCount(2, $image->referencies);
+        $index->dependencies()->detach();
+        $index->load('dependencies');
+        $this->assertCount(0, $index->dependencies);
     }
 
     /**
@@ -53,46 +60,6 @@ class NodeTest extends TestCase
      */
     public function testNodesDeletion(): void
     {
-        $node = $this->loadNode(self::$htmlId);
-        $this->assertTrue($node->delete());
-        $node = $this->loadNode(self::$containerId);
-        $this->assertTrue($node->delete());
-    }
-
-    /**
-     * Generic node creator
-     * 
-     * @param string $name
-     * @param string $class
-     * @param Node $parent
-     * @return int
-     */
-    private function createNode(string $name, string $class = Node::class, Node $parent = null): int
-    {
-        $node = (new $class());
-        $node->name = $name;
-        if ($parent) {
-            $node->parent()->associate($parent);
-        }
-        $res = $node->push();
-        $this->assertTrue($res);
-        return $node->id;
-    }
-
-    /**
-     * Load a node by ID field and optional class
-     *
-     * @param int $id
-     * @param string $class
-     * @return Node|NULL
-     */
-    private function loadNode(int $id, string $class = Node::class): ?Node
-    {
-        $node = (new $class())::find($id);
-        $this->assertInstanceOf(Node::class, $node);
-        if ($class != Node::class and $node->type != 'Node') {
-            $this->assertInstanceOf("{$node->node_type->namespace}\\{$node->type}", $node);
-        }
-        return $node;
+        $this->deleteNodes();
     }
 }
