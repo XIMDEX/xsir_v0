@@ -11,7 +11,8 @@ class File extends Node
         parent::__construct();
         $this->loadProperties([
             'icon' => 'file',
-            'isHidden' => false
+            'isHidden' => false,
+            'isVersionable' => true
         ]);
     }
 }

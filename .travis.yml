@@ -17,8 +17,8 @@ matrix:
 services:
   - mysql
 
-# addons:
-#   mariadb: '10.3'
+addons:
+  mariadb: '10.3'
 
 before_install:
   - mkdir xsir
@@ -26,9 +26,9 @@ before_install:
   - mv !(xsir) xsir
   - mv .git xsir
   - composer self-update
-  - mysql -e "CREATE DATABASE laravel;"
 
 before_script:
+  - mysql -e "CREATE DATABASE laravel;"
   - composer create-project --prefer-dist laravel/laravel laravel $LARAVEL_VERSION
   - mv .env.travis laravel/.env
   - mv xsir/phpunit.travis.xml laravel/phpunit.xml

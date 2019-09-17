@@ -11,8 +11,7 @@ class HTML extends Structured
         parent::__construct();
         $this->loadProperties([
             'icon' => 'code_file',
-            'isPublishable' => true,
-            'isVersionable' => true
+            'isPublishable' => true
         ]);
     }
 }

@@ -45,7 +45,6 @@ abstract class CommonTest extends TestCase
      */
     protected function deleteNodes(): void
     {
-        // foreach (array_reverse(self::$nodes) as $id) {
         while ($id = array_pop(self::$nodes)) {
             $this->assertTrue($this->loadNode($id)->delete());
         }

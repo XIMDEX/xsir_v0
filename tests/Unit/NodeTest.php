@@ -46,9 +46,7 @@ class NodeTest extends CommonTest
             self::$nodes[$dependency->name] = $dependency->id;
         }
         $this->assertCount(2, $index->dependencies);
-        // $contact = $this->loadNode($contact->id);
         $contact->dependencies()->syncWithoutDetaching($image->id);
-        // $image = $this->loadNode($imageId);
         $this->assertCount(2, $image->referencies);
         $index->dependencies()->detach();
         $index->load('dependencies');
