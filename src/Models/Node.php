@@ -49,7 +49,7 @@ class Node extends Model
      * @var array
      */
     protected $nodeProperties = [
-        'icon' => "nodes",
+        'icon' => 'nodes',
         'isHidden' => true,
         'isPublishable' => false,
         'isCacheable' => true,
@@ -101,6 +101,11 @@ class Node extends Model
     public function getIsVersionablePropertyAttribute(): bool
     {
         return $this->nodeProperties['isVersionable'];
+    }
+    
+    public function getIsPublishablePropertyAttribute(): bool
+    {
+        return $this->nodeProperties['isPublishable'];
     }
 
     public function getTypeAttribute()
@@ -179,7 +184,7 @@ class Node extends Model
         if ($result and $this->isVersionableProperty) {
             
             // A new version for this node must be created
-            if (Version::generate($this) === false) {
+            if (Version::increaseMinor($this) === false) {
                 $result = false;
             }
         }
@@ -192,7 +197,7 @@ class Node extends Model
     }
     
     /**
-     * // TODO ajlucena: Try this with boot function with the deleting event (https://medium.com/@c.nwaugha/delete-a-laravel-model-with-its-relations-88db34b495dd)
+     * Delete a node and associated versions
      * 
      * {@inheritDoc}
      * @see \Illuminate\Database\Eloquent\Model::delete()

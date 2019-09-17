@@ -32,6 +32,21 @@ class VersionTest extends CommonTest
     }
     
     /**
+     * Verify that the major version is created correctly
+     */
+    public function testMajorVersion(): void
+    {
+        $index = Node::instanceFromNodeType(self::$nodes['index']);
+        $actualVersion = clone $index->version;
+        $this->assertTrue(Version::increaseMajor($index));
+        $this->assertCount(2, $index->versions);
+        $version = $index->version;
+        $this->assertEquals(1, $version->major);
+        $this->assertEquals(0, $version->minor);
+        $this->assertEquals($version->file, $actualVersion->file);
+    }
+    
+    /**
      * Nodes deletion test
      */
     public function testNodesDeletion(): void

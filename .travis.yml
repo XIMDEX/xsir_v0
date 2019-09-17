@@ -17,8 +17,8 @@ matrix:
 services:
   - mysql
 
-# addons:
-#   mariadb: '10.3'
+addons:
+  mariadb: '10.4'
 
 before_install:
   - mkdir xsir
